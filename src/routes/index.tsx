@@ -6,6 +6,11 @@ import { Shell, Stat } from "@/components/Shell";
 import { GRADES, GRADE_POINTS, calcGPA, type Course, type Grade } from "@/lib/gpa";
 import { useLocal, uid } from "@/lib/storage";
 
+const SEM3: [string, number][] = [
+  ["DSA", 3], ["DCMT LAB", 1], ["DCMT Theory", 3], ["AI Tools", 2], ["PCB Design", 2],
+  ["Finance", 2], ["Maths", 2], ["EMFT", 3], ["DLC", 3], ["German/Japanese", 2],
+];
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
