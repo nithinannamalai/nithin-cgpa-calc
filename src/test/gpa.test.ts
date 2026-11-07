@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calcGPA, requiredGPA, GRADE_POINTS } from "./gpa";
+import { calcGPA, requiredGPA, GRADE_POINTS } from "@/lib/gpa";
 
 describe("gpa rules", () => {
   it("maps grades to points", () => {
