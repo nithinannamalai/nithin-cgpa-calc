@@ -26,7 +26,7 @@ function TargetPage() {
 
   const nums = [f.prev, f.prevCredits, f.target, f.cur].map(Number);
   const filled = [f.prev, f.prevCredits, f.target, f.cur].every((v) => v !== "");
-  const req = filled ? requiredGPA(nums[0], nums[1], nums[2], nums[3]) : NaN;
+  const req = filled ? requiredGPA(Number(f.prev), Number(f.prevCredits), Number(f.target), Number(f.cur)) : NaN;
 
   let msg = "Fill in all fields to see your required GPA.";
   let tone = "text-muted-foreground";
