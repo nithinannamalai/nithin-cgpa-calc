@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import bg from "@/assets/bg.jpg";
+import bg from "@/assets/lambo-bg.jpg";
 
 const links = [
   { to: "/", label: "GPA" },
@@ -18,7 +18,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-20 px-3 pt-3 sm:px-6 sm:pt-5">
         <nav className="glass mx-auto flex max-w-4xl items-center justify-between gap-2 !rounded-full px-3 py-2 sm:px-5">
           <span className="font-display text-lg font-bold tracking-tight sm:text-xl">
-            Grade<span className="text-primary">Flow</span>
+            Cal<span className="text-primary">CGPA</span>
           </span>
           <div className="flex gap-1">
             {links.map((l) => (

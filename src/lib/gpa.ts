@@ -10,15 +10,14 @@ export function calcGPA(courses: Course[]) {
   return { totalCredits, totalPoints, gpa: totalCredits ? totalPoints / totalCredits : 0 };
 }
 
-export type Semester = { id: string; gpa: number; credits: number };
+export type Semester = { id: string; gpa: number };
+/** Simple average of semester GPAs (all semesters weighted equally). */
 export function calcCGPA(sems: Semester[]) {
-  const cr = sems.reduce((s, x) => s + (x.credits || 0), 0);
-  const pts = sems.reduce((s, x) => s + (x.credits || 0) * (x.gpa || 0), 0);
-  return cr ? pts / cr : 0;
+  if (!sems.length) return 0;
+  return sems.reduce((s, x) => s + (x.gpa || 0), 0) / sems.length;
 }
 
-/** GPA needed this semester so the new CGPA hits the target. */
-export function requiredGPA(prevCGPA: number, prevCredits: number, target: number, curCredits: number) {
-  if (curCredits <= 0) return NaN;
-  return (target * (prevCredits + curCredits) - prevCGPA * prevCredits) / curCredits;
+/** GPA needed this semester so the new CGPA hits the target (equal semester weighting). */
+export function requiredGPA(prevCGPA: number, target: number) {
+  return 2 * target - prevCGPA;
 }
