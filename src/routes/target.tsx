@@ -24,7 +24,6 @@ function TargetPage() {
     if (!f.cur && semCredits) setF((x) => ({ ...x, cur: String(semCredits) }));
   }, [semCredits]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const nums = [f.prev, f.prevCredits, f.target, f.cur].map(Number);
   const filled = [f.prev, f.prevCredits, f.target, f.cur].every((v) => v !== "");
   const req = filled ? requiredGPA(Number(f.prev), Number(f.prevCredits), Number(f.target), Number(f.cur)) : NaN;
 
