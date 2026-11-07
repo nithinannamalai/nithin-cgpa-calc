@@ -92,6 +92,13 @@ function GpaPage() {
               All {g}
             </button>
           ))}
+          <span className="text-sm text-muted-foreground">Sort by:</span>
+          <button className="clay-pill" onClick={() => setCourses([...courses].sort((a, b) => b.credits - a.credits))}>
+            Highest credit course
+          </button>
+          <button className="clay-pill" onClick={() => setCourses([...courses].sort((a, b) => a.credits - b.credits))}>
+            Lowest credit course
+          </button>
         </div>
       )}
 
