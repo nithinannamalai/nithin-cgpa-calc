@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Pencil, Trash2, Plus, Check, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Pencil, Trash2, Plus, Check, X, Share2 } from "lucide-react";
 import { Shell, Stat } from "@/components/Shell";
 import { GRADES, GRADE_POINTS, calcGPA, type Course, type Grade } from "@/lib/gpa";
 import { useLocal, uid } from "@/lib/storage";
@@ -23,6 +24,19 @@ function GpaPage() {
   const [credits, setCredits] = useState("");
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState({ name: "", credits: "" });
+  useEffect(() => {
+    const m = window.location.hash.match(/c=([^&]+)/);
+    if (!m) return;
+    try {
+      const list = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1]))))) as [string, number][];
+      setCourses(list.map(([n, cr]) => ({ id: uid(), name: n, credits: cr, grade: "O" as Grade })));
+    } catch {}
+  }, []);
+  const share = async () => {
+    const data = btoa(unescape(encodeURIComponent(JSON.stringify(courses.map((c) => [c.name, c.credits])))));
+    const url = `${window.location.origin}/#c=${encodeURIComponent(data)}`;
+    try { await navigator.clipboard.writeText(url); toast.success("Share link copied!"); } catch { window.prompt("Copy this link:", url); }
+  };
   const { gpa, totalCredits, totalPoints } = calcGPA(courses);
 
   const add = () => {
@@ -56,6 +70,7 @@ function GpaPage() {
 
       {courses.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button className="clay-pill" onClick={share}><Share2 size={14} className="inline" /> Share courses</button>
           <span className="text-sm text-muted-foreground">Quick set:</span>
           {(["O", "A+", "A"] as Grade[]).map((g) => (
             <button key={g} className="clay-pill" onClick={() => setCourses(courses.map((c) => ({ ...c, grade: g })))}>
