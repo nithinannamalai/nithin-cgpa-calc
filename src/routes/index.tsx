@@ -55,6 +55,17 @@ function GpaPage() {
         <button className="btn-primary" type="submit"><Plus size={18} /> Save course</button>
       </form>
 
+      {courses.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="text-sm text-muted-foreground">Quick set:</span>
+          {(["O", "A+", "A"] as Grade[]).map((g) => (
+            <button key={g} className="clay-pill" onClick={() => setCourses(courses.map((c) => ({ ...c, grade: g })))}>
+              All {g}
+            </button>
+          ))}
+        </div>
+      )}
+
       <ul className="mt-4 space-y-3">
         {courses.length === 0 && (
           <li className="glass rounded-2xl p-8 text-center text-muted-foreground">No courses yet — add your first one above.</li>
