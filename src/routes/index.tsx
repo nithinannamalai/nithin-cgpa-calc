@@ -1,10 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, Check, X, Share2 } from "lucide-react";
+import { Pencil, Trash2, Plus, Check, X, Share2, GraduationCap } from "lucide-react";
 import { Shell, Stat } from "@/components/Shell";
 import { GRADES, GRADE_POINTS, calcGPA, type Course, type Grade } from "@/lib/gpa";
 import { useLocal, uid } from "@/lib/storage";
+
+const SEM3: [string, number][] = [
+  ["DSA", 3], ["DCMT LAB", 1], ["DCMT Theory", 3], ["AI Tools", 2], ["PCB Design", 2],
+  ["Finance", 2], ["Maths", 2], ["EMFT", 3], ["DLC", 3], ["German/Japanese", 2],
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -67,6 +72,16 @@ function GpaPage() {
         <input className="field sm:w-32" placeholder="Credits" type="number" min="0" step="0.5" inputMode="decimal" value={credits} onChange={(e) => setCredits(e.target.value)} />
         <button className="btn-primary" type="submit"><Plus size={18} /> Save course</button>
       </form>
+
+      <button
+        className="clay-pill mt-3"
+        onClick={() => {
+          setCourses(SEM3.map(([n, cr]) => ({ id: uid(), name: n, credits: cr, grade: "O" as Grade })));
+          toast.success("Sem 3 courses loaded!");
+        }}
+      >
+        <GraduationCap size={14} className="inline" /> Sem 3
+      </button>
 
       {courses.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-2">
