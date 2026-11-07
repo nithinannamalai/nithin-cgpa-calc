@@ -8,9 +8,9 @@ import { useLocal, uid } from "@/lib/storage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "GradeFlow — GPA Calculator" },
+      { title: "CalCGPA — GPA Calculator" },
       { name: "description", content: "Add your courses, credits and grades to calculate your semester GPA instantly." },
-      { property: "og:title", content: "GradeFlow — GPA Calculator" },
+      { property: "og:title", content: "CalCGPA — GPA Calculator" },
       { property: "og:description", content: "Add your courses, credits and grades to calculate your semester GPA instantly." },
     ],
   }),

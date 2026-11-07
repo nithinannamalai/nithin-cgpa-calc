@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calcGPA, requiredGPA, GRADE_POINTS } from "@/lib/gpa";
+import { calcGPA, calcCGPA, requiredGPA, GRADE_POINTS } from "@/lib/gpa";
 
 describe("gpa rules", () => {
   it("maps grades to points", () => {
@@ -14,7 +14,10 @@ describe("gpa rules", () => {
     expect(r.totalPoints).toBe(58);
     expect(r.gpa).toBeCloseTo(5.8);
   });
-  it("required GPA", () => {
-    expect(requiredGPA(8, 60, 8.5, 20)).toBeCloseTo(10);
+  it("CGPA = simple average of semester GPAs", () => {
+    expect(calcCGPA([{ id: "1", gpa: 8 }, { id: "2", gpa: 9 }])).toBeCloseTo(8.5);
+  });
+  it("required GPA = 2*target - previous CGPA", () => {
+    expect(requiredGPA(8, 8.5)).toBeCloseTo(9);
   });
 });
