@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CgpaRouteImport } from './routes/cgpa'
+import { Route as TargetRouteImport } from './routes/target'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CgpaRoute = CgpaRouteImport.update({
+  id: '/cgpa',
+  path: '/cgpa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TargetRoute = TargetRouteImport.update({
+  id: '/target',
+  path: '/target',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cgpa': typeof CgpaRoute
+  '/target': typeof TargetRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cgpa': typeof CgpaRoute
+  '/target': typeof TargetRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cgpa': typeof CgpaRoute
+  '/target': typeof TargetRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/cgpa' | '/target'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/cgpa' | '/target'
+  id: '__root__' | '/' | '/cgpa' | '/target'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CgpaRoute: typeof CgpaRoute
+  TargetRoute: typeof TargetRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cgpa': {
+      id: '/cgpa'
+      path: '/cgpa'
+      fullPath: '/cgpa'
+      preLoaderRoute: typeof CgpaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/target': {
+      id: '/target'
+      path: '/target'
+      fullPath: '/target'
+      preLoaderRoute: typeof TargetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CgpaRoute: CgpaRoute,
+  TargetRoute: TargetRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
