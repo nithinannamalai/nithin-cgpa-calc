@@ -85,20 +85,26 @@ function GpaPage() {
 
       {courses.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <button className="clay-pill" onClick={share}><Share2 size={14} className="inline" /> Share courses</button>
           <span className="text-sm text-muted-foreground">Quick set:</span>
           {(["O", "A+", "A"] as Grade[]).map((g) => (
             <button key={g} className="clay-pill" onClick={() => setCourses(courses.map((c) => ({ ...c, grade: g })))}>
               All {g}
             </button>
           ))}
-          <span className="text-sm text-muted-foreground">Sort by:</span>
-          <button className="clay-pill" onClick={() => setCourses([...courses].sort((a, b) => b.credits - a.credits))}>
-            Highest credit course
-          </button>
-          <button className="clay-pill" onClick={() => setCourses([...courses].sort((a, b) => a.credits - b.credits))}>
-            Lowest credit course
-          </button>
+          <select
+            className="clay-pill bg-transparent cursor-pointer"
+            defaultValue=""
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "high") setCourses([...courses].sort((a, b) => b.credits - a.credits));
+              if (v === "low") setCourses([...courses].sort((a, b) => a.credits - b.credits));
+              e.target.value = "";
+            }}
+          >
+            <option value="" disabled className="text-foreground bg-background">Sort by…</option>
+            <option value="high" className="text-foreground bg-background">Highest credit course</option>
+            <option value="low" className="text-foreground bg-background">Lowest credit course</option>
+          </select>
         </div>
       )}
 
