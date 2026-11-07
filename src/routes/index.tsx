@@ -28,7 +28,7 @@ function GpaPage() {
     const m = window.location.hash.match(/c=([^&]+)/);
     if (!m) return;
     try {
-      const list = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1]))))) as [string, number][];
+      const list = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1] ?? ""))))) as [string, number][];
       setCourses(list.map(([n, cr]) => ({ id: uid(), name: n, credits: cr, grade: "O" as Grade })));
     } catch {}
   }, []);
