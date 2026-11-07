@@ -42,9 +42,9 @@ export function Shell({ children }: { children: ReactNode }) {
 
 export function Stat({ label, value, big }: { label: string; value: string; big?: boolean }) {
   return (
-    <div className="glass rounded-2xl p-4 text-center">
+    <div className="glass rounded-2xl px-2 py-4 text-center">
       <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
-      <div className={`font-display font-bold ${big ? "text-gradient text-4xl sm:text-5xl" : "text-2xl"}`}>{value}</div>
+      <div className={`font-display font-bold ${big ? "text-gradient text-3xl sm:text-5xl" : "text-2xl"}`}>{value}</div>
     </div>
   );
 }

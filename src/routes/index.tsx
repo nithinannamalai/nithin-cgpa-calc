@@ -90,7 +90,7 @@ function GpaPage() {
                 </div>
                 <div className="mt-3 grid grid-cols-7 gap-1">
                   {GRADES.map((g: Grade) => (
-                    <button key={g} onClick={() => update(c.id, { grade: g })} className={`grade-chip ${c.grade === g ? "grade-chip-active" : ""}`}>{g}</button>
+                    <button key={g} onClick={() => update(c.id, { grade: g })} data-active={c.grade === g} className="grade-chip">{g}</button>
                   ))}
                 </div>
               </>
