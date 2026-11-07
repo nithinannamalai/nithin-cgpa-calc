@@ -73,6 +73,16 @@ function GpaPage() {
         <button className="btn-primary" type="submit"><Plus size={18} /> Save course</button>
       </form>
 
+      <button
+        className="clay-pill mt-3"
+        onClick={() => {
+          setCourses(SEM3.map(([n, cr]) => ({ id: uid(), name: n, credits: cr, grade: "O" as Grade })));
+          toast.success("Sem 3 courses loaded!");
+        }}
+      >
+        <GraduationCap size={14} className="inline" /> Sem 3
+      </button>
+
       {courses.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <button className="clay-pill" onClick={share}><Share2 size={14} className="inline" /> Share courses</button>
