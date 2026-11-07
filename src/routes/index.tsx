@@ -38,7 +38,6 @@ function GpaPage() {
   return (
     <Shell>
       <h1 className="font-display text-3xl font-bold sm:text-5xl">Semester GPA</h1>
-      <p className="mt-1 text-muted-foreground">Add courses, pick your grades, watch it update.</p>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
         <Stat label="GPA" value={gpa.toFixed(2)} big />
