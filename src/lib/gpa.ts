@@ -17,6 +17,22 @@ export function calcCGPA(sems: Semester[]) {
   return sems.reduce((s, x) => s + (x.gpa || 0), 0) / sems.length;
 }
 
+export type ParsedSem = { label: string; raw: string; gpa: number; valid: boolean; reason?: "over" | "nan" };
+/** Parse "8.5, 9, 7.2" into Sem 1, Sem 2, ... Entries above 10 or non-numbers are flagged invalid. */
+export function parseGPAList(input: string): ParsedSem[] {
+  return input
+    .split(/[,\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((raw, i) => {
+      const gpa = Number(raw);
+      const label = `Sem ${i + 1}`;
+      if (!Number.isFinite(gpa) || gpa < 0) return { label, raw, gpa: 0, valid: false, reason: "nan" as const };
+      if (gpa > 10) return { label, raw, gpa, valid: false, reason: "over" as const };
+      return { label, raw, gpa, valid: true };
+    });
+}
+
 /** GPA needed this semester so the new CGPA hits the target (equal semester weighting). */
 export function requiredGPA(prevCGPA: number, target: number) {
   return 2 * target - prevCGPA;
