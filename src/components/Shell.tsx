@@ -12,7 +12,7 @@ export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       <div className="fixed inset-0 -z-10">
-        <img src={bg} alt="" width={1920} height={1088} className="h-full w-full scale-110 object-cover blur-lg" />
+        <img src={bg} alt="" width={1920} height={1088} className="h-full w-full scale-110 object-cover blur-xl" />
         <div className="absolute inset-0 bg-overlay" />
       </div>
       <header className="sticky top-0 z-20 px-3 pt-3 sm:px-6 sm:pt-5">
