@@ -21,11 +21,11 @@ describe("gpa rules", () => {
     const r = parseGPAList("8.5, 9 ,11, abc");
     expect(r.map((s) => s.label)).toEqual(["Sem 1", "Sem 2", "Sem 3", "Sem 4"]);
     expect(r.map((s) => s.valid)).toEqual([true, true, false, false]);
-    expect(r[2].reason).toBe("over");
-    expect(r[3].reason).toBe("nan");
+    expect(r[2]?.reason).toBe("over");
+    expect(r[3]?.reason).toBe("nan");
   });
   it("accepts exactly 10 as valid", () => {
-    expect(parseGPAList("10")[0].valid).toBe(true);
+    expect(parseGPAList("10")[0]?.valid).toBe(true);
   });
   it("required GPA = 2*target - previous CGPA", () => {
     expect(requiredGPA(8, 8.5)).toBeCloseTo(9);
