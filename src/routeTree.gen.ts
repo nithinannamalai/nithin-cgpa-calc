@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CgpaRouteImport } from './routes/cgpa'
+import { Route as MarksRouteImport } from './routes/marks'
 import { Route as TargetRouteImport } from './routes/target'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const CgpaRoute = CgpaRouteImport.update({
   path: '/cgpa',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarksRoute = MarksRouteImport.update({
+  id: '/marks',
+  path: '/marks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TargetRoute = TargetRouteImport.update({
   id: '/target',
   path: '/target',
@@ -32,30 +38,34 @@ const TargetRoute = TargetRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cgpa': typeof CgpaRoute
+  '/marks': typeof MarksRoute
   '/target': typeof TargetRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cgpa': typeof CgpaRoute
+  '/marks': typeof MarksRoute
   '/target': typeof TargetRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cgpa': typeof CgpaRoute
+  '/marks': typeof MarksRoute
   '/target': typeof TargetRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cgpa' | '/target'
+  fullPaths: '/' | '/cgpa' | '/marks' | '/target'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cgpa' | '/target'
-  id: '__root__' | '/' | '/cgpa' | '/target'
+  to: '/' | '/cgpa' | '/marks' | '/target'
+  id: '__root__' | '/' | '/cgpa' | '/marks' | '/target'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CgpaRoute: typeof CgpaRoute
+  MarksRoute: typeof MarksRoute
   TargetRoute: typeof TargetRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CgpaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/marks': {
+      id: '/marks'
+      path: '/marks'
+      fullPath: '/marks'
+      preLoaderRoute: typeof MarksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/target': {
       id: '/target'
       path: '/target'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CgpaRoute: CgpaRoute,
+  MarksRoute: MarksRoute,
   TargetRoute: TargetRoute,
 }
 export const routeTree = rootRouteImport
