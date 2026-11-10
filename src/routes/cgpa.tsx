@@ -29,7 +29,7 @@ function CgpaPage() {
   return (
     <Shell>
       <h1 className="font-display text-3xl font-bold sm:text-5xl">Overall CGPA</h1>
-      <p className="mt-1 text-muted-foreground">Type your semester GPAs separated by commas — we average them for you.</p>
+      <p className="mt-1 text-muted-foreground">Type your semester GPAs separated by commas to auto-categorise &amp; calculate CGPA</p>
       <div className="mt-6 grid grid-cols-2 gap-3">
         <Stat label="CGPA" value={cgpa.toFixed(2)} big />
         <Stat label="Semesters" value={String(valid.length)} />
