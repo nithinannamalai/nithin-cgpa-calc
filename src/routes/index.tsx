@@ -58,8 +58,9 @@ function GpaPage() {
     <Shell>
       <h1 className="font-display text-3xl font-bold sm:text-5xl">Semester GPA</h1>
 
-      <div className="mt-6 grid grid-cols-3 gap-3">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="GPA" value={gpa.toFixed(2)} big />
+        <Stat label="Courses" value={String(courses.length)} />
         <Stat label="Credits" value={String(totalCredits)} />
         <Stat label="Points" value={String(totalPoints)} />
       </div>
@@ -92,7 +93,8 @@ function GpaPage() {
             </button>
           ))}
           <select
-            className="clay-pill bg-transparent cursor-pointer"
+            className="clay-pill cursor-pointer outline-none"
+            aria-label="Sort by"
             defaultValue=""
             onChange={(e) => {
               const v = e.target.value;
@@ -101,9 +103,9 @@ function GpaPage() {
               e.target.value = "";
             }}
           >
-            <option value="" disabled className="text-foreground bg-background">Sort by…</option>
-            <option value="high" className="text-foreground bg-background">Highest credit course</option>
-            <option value="low" className="text-foreground bg-background">Lowest credit course</option>
+            <option value="" disabled className="bg-popover text-popover-foreground">Sort by…</option>
+            <option value="high" className="bg-popover text-popover-foreground">Highest credit course</option>
+            <option value="low" className="bg-popover text-popover-foreground">Lowest credit course</option>
           </select>
         </div>
       )}
