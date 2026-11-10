@@ -78,6 +78,8 @@
   --primary-foreground: oklch(0.2 0.04 240);
   --secondary: oklch(0.75 0.12 195);
   --secondary-foreground: oklch(0.2 0.04 240);
+  --tertiary: oklch(0.62 0.2 300);
+  --tertiary-foreground: oklch(0.98 0.01 300);
   --muted: oklch(1 0 0 / 8%);
   --muted-foreground: oklch(0.8 0.03 220);
   --accent: oklch(1 0 0 / 12%);
@@ -164,8 +166,8 @@ body { font-family: var(--font-sans); }
 @utility clay-pill {
   display: inline-flex; align-items: center; gap: .35rem;
   border-radius: 999px; padding: .5rem 1rem; font-size: .85rem; font-weight: 700;
-  color: var(--secondary-foreground); background: var(--secondary);
-  box-shadow: 6px 8px 16px -6px color-mix(in oklab, var(--secondary) 70%, transparent), inset 3px 3px 6px oklch(1 0 0 / 45%), inset -4px -4px 8px oklch(0.4 0.1 200 / 45%);
+  color: var(--pill-fg, var(--secondary-foreground)); background: var(--pill-bg, var(--secondary));
+  box-shadow: 6px 8px 16px -6px color-mix(in oklab, var(--pill-bg, var(--secondary)) 70%, transparent), inset 3px 3px 6px oklch(1 0 0 / 45%), inset -4px -4px 8px color-mix(in oklab, var(--pill-bg, var(--secondary)) 55%, oklch(0.2 0.05 240));
   transition: all .25s cubic-bezier(.2,.8,.2,1);
   &:hover { transform: translateY(-2px) scale(1.04); }
   &:active { transform: scale(.95); }
