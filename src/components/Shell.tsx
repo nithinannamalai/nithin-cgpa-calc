@@ -3,9 +3,10 @@ import type { ReactNode } from "react";
 import bg from "@/assets/lambo-bg.jpg";
 
 const links = [
-  { to: "/", label: "GPA" },
-  { to: "/cgpa", label: "CGPA" },
-  { to: "/target", label: "Required GPA" },
+  { to: "/", label: "GPA", short: "GPA" },
+  { to: "/cgpa", label: "CGPA", short: "CGPA" },
+  { to: "/target", label: "Required GPA", short: "Req." },
+  { to: "/marks", label: "End Sem Marks", short: "Marks" },
 ] as const;
 
 export function Shell({ children }: { children: ReactNode }) {
@@ -26,10 +27,11 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={l.to}
                 to={l.to}
                 activeOptions={{ exact: true }}
-                className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all duration-300 hover:text-foreground sm:text-sm"
+                className="whitespace-nowrap rounded-full px-2 py-1.5 text-xs font-medium text-muted-foreground transition-all duration-300 hover:text-foreground sm:px-3 sm:text-sm"
                 activeProps={{ className: "!text-primary-foreground bg-primary shadow-glow" }}
               >
-                {l.label}
+                <span className="md:hidden">{l.short}</span>
+                <span className="hidden md:inline">{l.label}</span>
               </Link>
             ))}
           </div>
