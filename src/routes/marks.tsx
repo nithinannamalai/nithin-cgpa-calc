@@ -110,7 +110,7 @@ function MarksPage() {
               </div>
 
               <div className="mt-3 grid grid-cols-2 gap-1 rounded-full p-1 [background:oklch(0.1_0.04_240/30%)]">
-                {([["split", "Test 1, Test 2 & Term Work"], ["total", "I know total internals"]] as const).map(([m, label]) => (
+                {([["split", "Tests & Term Work"], ["total", "Total internals /40"]] as const).map(([m, label]) => (
                   <button
                     key={m}
                     onClick={() => update(s.id, { mode: m })}
