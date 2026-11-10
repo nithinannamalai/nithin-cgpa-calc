@@ -93,7 +93,7 @@ function GpaPage() {
             </button>
           ))}
           <select
-            className="clay-pill cursor-pointer outline-none"
+            className="clay-pill cursor-pointer outline-none [--pill-bg:var(--tertiary)] [--pill-fg:var(--tertiary-foreground)]"
             aria-label="Sort by"
             defaultValue=""
             onChange={(e) => {
