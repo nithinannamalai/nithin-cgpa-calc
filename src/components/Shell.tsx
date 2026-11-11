@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BarChart3, Calculator, ClipboardList, Target } from "lucide-react";
-import type { ReactNode } from "react";
+import { BarChart3, Calculator, ClipboardList, Linkedin, Target } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
 import bg from "@/assets/lambo-bg.jpg";
 
 const links = [
@@ -13,11 +13,31 @@ const links = [
 export function Shell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const active = links.findIndex((l) => l.to === pathname);
+  // Hide the phone tab bar while typing so it never sits on top of the keyboard.
+  const [typing, setTyping] = useState(false);
+  useEffect(() => {
+    const isField = (el: EventTarget | null) =>
+      el instanceof HTMLElement && el.matches("input:not([type=checkbox]):not([type=radio]), textarea, select");
+    const onIn = (e: FocusEvent) => {
+      if (!isField(e.target)) return;
+      setTyping(true);
+      const el = e.target as HTMLElement;
+      // After the keyboard opens, gently bring the field into view.
+      window.setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 300);
+    };
+    const onOut = () => window.setTimeout(() => setTyping(isField(document.activeElement)), 50);
+    document.addEventListener("focusin", onIn);
+    document.addEventListener("focusout", onOut);
+    return () => {
+      document.removeEventListener("focusin", onIn);
+      document.removeEventListener("focusout", onOut);
+    };
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       <div className="fixed inset-0 -z-10">
-        <img src={bg} alt="" width={1920} height={1088} className="h-full w-full scale-110 object-cover blur-xl" />
+        <img src={bg} alt="" width={1920} height={1088} className="h-full w-full scale-110 object-cover blur-xl [transform:translateZ(0)_scale(1.1)] will-change-transform" />
         <div className="absolute inset-0 bg-overlay" />
       </div>
       <header className="sticky top-0 z-20 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:pt-5">
@@ -42,12 +62,26 @@ export function Shell({ children }: { children: ReactNode }) {
         </nav>
       </header>
 
-      <main className="animate-rise mx-auto max-w-4xl px-3 pb-32 pt-6 sm:px-6 sm:py-10">{children}</main>
+      <main className="animate-rise mx-auto max-w-4xl px-3 pb-32 pt-6 sm:px-6 sm:py-10">
+        {children}
+        <footer className="mt-10 flex justify-center">
+          <a
+            href="https://www.linkedin.com/in/nithin-annamalai-r-01b531381"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass inline-flex items-center gap-2 !rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors duration-300 hover:text-primary"
+          >
+            <Linkedin size={16} className="shrink-0 text-secondary" />
+            Developer: <span className="text-primary underline decoration-primary/40 underline-offset-4">Nithin</span>
+          </a>
+        </footer>
+      </main>
 
       {/* Phone: iOS-style glass tab bar with sliding thumb */}
       <nav
         aria-label="Sections"
-        className="fixed inset-x-0 bottom-0 z-30 px-4 pb-[max(0.9rem,env(safe-area-inset-bottom))] sm:hidden"
+        data-hidden={typing}
+        className="fixed inset-x-0 bottom-0 z-30 px-4 pb-[max(0.9rem,env(safe-area-inset-bottom))] transition-all duration-300 ease-out data-[hidden=true]:pointer-events-none data-[hidden=true]:translate-y-[140%] data-[hidden=true]:opacity-0 sm:hidden"
       >
         <div className="ios-tabbar relative mx-auto grid max-w-md grid-cols-4 p-1.5">
           {active >= 0 && (
