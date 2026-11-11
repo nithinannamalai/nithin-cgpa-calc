@@ -113,7 +113,7 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 /* Smooth taps on phones: no grey flash, no double-tap zoom delay */
 a, button, select, input, textarea { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 /* 16px inputs stop iPhones from zooming in when a box is tapped */
-input, textarea, select { font-size: max(16px, 1em); }
+@layer base { input, textarea { font-size: 16px; } }
 
 @utility glass {
   background: linear-gradient(145deg, oklch(1 0 0 / 16%), oklch(1 0 0 / 6%));

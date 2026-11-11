@@ -37,7 +37,7 @@ export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       <div className="fixed inset-0 -z-10">
-        <img src={bg} alt="" width={1920} height={1088} className="h-full w-full scale-110 object-cover blur-xl [transform:translateZ(0)_scale(1.1)] will-change-transform" />
+        <img src={bg} alt="" width={1920} height={1088} className="h-full w-full scale-110 object-cover blur-xl transform-gpu will-change-transform" />
         <div className="absolute inset-0 bg-overlay" />
       </div>
       <header className="sticky top-0 z-20 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 sm:pt-5">
