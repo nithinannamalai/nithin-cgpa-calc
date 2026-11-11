@@ -9,10 +9,17 @@ describe("gpa rules", () => {
     const r = calcGPA([
       { id: "1", name: "a", credits: 4, grade: "O" },
       { id: "2", name: "b", credits: 3, grade: "B" },
-      { id: "3", name: "c", credits: 3, grade: "U" },
+      { id: "3", name: "c", credits: 3, grade: "A" },
     ]);
-    expect(r.totalPoints).toBe(58);
-    expect(r.gpa).toBeCloseTo(5.8);
+    expect(r.totalPoints).toBe(82);
+    expect(r.gpa).toBeCloseTo(8.2);
+  });
+  it("GPA is 0 when any course is graded U", () => {
+    const r = calcGPA([
+      { id: "1", name: "a", credits: 4, grade: "O" },
+      { id: "2", name: "b", credits: 3, grade: "U" },
+    ]);
+    expect(r.gpa).toBe(0);
   });
   it("CGPA = simple average of semester GPAs", () => {
     expect(calcCGPA([{ id: "1", gpa: 8 }, { id: "2", gpa: 9 }])).toBeCloseTo(8.5);

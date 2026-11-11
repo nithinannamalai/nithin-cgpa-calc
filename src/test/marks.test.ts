@@ -19,6 +19,11 @@ describe("end sem marks rules", () => {
     const r = calcMarks({ ...base, mode: "total", i1: "50", internals: "32", endSem: "50" });
     expect(r.total).toBeCloseTo(62);
   });
+  it("total internals (/50) + End Sem converted to /50", () => {
+    const r = calcMarks({ ...base, mode: "total50", internals50: "40", endSem: "80" });
+    expect(r.endSem).toBeCloseTo(40);
+    expect(r.total).toBeCloseTo(80);
+  });
   it("clamps values to 0..max", () => {
     expect(clampMark("55", 50)).toBe("50");
     expect(clampMark("-3", 10)).toBe("0");

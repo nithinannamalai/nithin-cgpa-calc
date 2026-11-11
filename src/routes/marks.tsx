@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus, RotateCcw, Trash2 } from "lucide-react";
-import { Shell, Stat } from "@/components/Shell";
+import { Fragment } from "react";
+import { Shell } from "@/components/Shell";
 import { MARK_LIMITS, calcMarks, clampMark, type MarkField, type MarksSubject } from "@/lib/marks";
 import { useLocal, uid } from "@/lib/storage";
 
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/marks")({
 });
 
 const blank = (n: number): MarksSubject => ({
-  id: uid(), name: `Subject ${n}`, mode: "split", i1: "", i2: "", tw: "", internals: "", endSem: "",
+  id: uid(), name: `Subject ${n}`, mode: "split", i1: "", i2: "", tw: "", internals: "", internals50: "", endSem: "",
 });
 
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
@@ -29,20 +30,12 @@ function MarksPage() {
   const update = (id: string, patch: Partial<MarksSubject>) =>
     setSubjects(subjects.map((s) => (s.id === id ? { ...s, ...patch } : s)));
 
-  const totals = subjects.map((s) => calcMarks(s).total);
-  const avg = totals.length ? totals.reduce((a, b) => a + b, 0) / totals.length : 0;
-
   return (
     <Shell>
       <h1 className="font-display text-3xl font-bold sm:text-5xl">End Sem Marks</h1>
       <p className="mt-1 text-muted-foreground">Total /100 = Test 1 × 0.3 + Test 2 × 0.3 + Term Work + End Sem × 0.6</p>
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
-        <Stat label="Average" value={fmt(avg)} big />
-        <Stat label="Subjects" value={String(subjects.length)} />
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-2">
         <button className="btn-primary" onClick={() => setSubjects([...subjects, blank(subjects.length + 1)])}>
           <Plus size={18} /> Add subject
         </button>
@@ -73,7 +66,7 @@ function MarksPage() {
                 step="0.5"
                 inputMode="decimal"
                 placeholder={`0–${MARK_LIMITS[k]}`}
-                value={s[k]}
+                value={s[k] ?? ""}
                 onChange={(e) => update(s.id, { [k]: clampMark(e.target.value, MARK_LIMITS[k]) })}
               />
             </label>
@@ -81,7 +74,9 @@ function MarksPage() {
           const rows: [string, number, number][] =
             s.mode === "split"
               ? [["Test 1 × 0.3", r.i1, 15], ["Test 2 × 0.3", r.i2, 15], ["Term Work", r.tw, 10], ["End Sem × 0.6", r.endSem, 60]]
-              : [["Internals", r.internals, 40], ["End Sem × 0.6", r.endSem, 60]];
+              : s.mode === "total"
+                ? [["Internals", r.internals, 40], ["End Sem × 0.6", r.endSem, 60]]
+                : [["Internals", r.internals, 50], ["End Sem ÷ 2", r.endSem, 50]];
 
           return (
             <li key={s.id} className="glass animate-rise rounded-2xl p-4">
@@ -96,7 +91,7 @@ function MarksPage() {
                   className="btn-ghost"
                   aria-label="Reset subject"
                   title="Reset marks"
-                  onClick={() => update(s.id, { i1: "", i2: "", tw: "", internals: "", endSem: "" })}
+                  onClick={() => update(s.id, { i1: "", i2: "", tw: "", internals: "", internals50: "", endSem: "" })}
                 >
                   <RotateCcw size={16} />
                 </button>
@@ -109,16 +104,18 @@ function MarksPage() {
                 </button>
               </div>
 
-              <div className="mt-3 grid grid-cols-2 gap-1 rounded-full p-1 [background:oklch(0.1_0.04_240/30%)]">
-                {([["split", "Tests & Term Work"], ["total", "Total internals /40"]] as const).map(([m, label]) => (
-                  <button
-                    key={m}
-                    onClick={() => update(s.id, { mode: m })}
-                    data-active={s.mode === m}
-                    className="rounded-full px-2 py-1.5 text-xs font-semibold text-muted-foreground transition-all duration-300 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:shadow-glow sm:text-sm"
-                  >
-                    {label}
-                  </button>
+              <div className="mt-3 flex items-center gap-1 rounded-3xl p-1 [background:oklch(0.1_0.04_240/30%)]">
+                {([["split", "Tests & Term Work"], ["total", "Total internals /40"], ["total50", "Total internals /50"]] as const).map(([m, label], i) => (
+                  <Fragment key={m}>
+                    {i > 0 && <span className="shrink-0 px-0.5 text-[10px] font-semibold uppercase text-muted-foreground sm:px-1 sm:text-xs">or</span>}
+                    <button
+                      onClick={() => update(s.id, { mode: m })}
+                      data-active={s.mode === m}
+                      className="min-w-0 flex-1 rounded-full px-2 py-1.5 text-[11px] font-semibold leading-tight text-muted-foreground transition-all duration-300 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:shadow-glow sm:text-sm"
+                    >
+                      {label}
+                    </button>
+                  </Fragment>
                 ))}
               </div>
 
@@ -133,7 +130,7 @@ function MarksPage() {
                     </>
                   ) : (
                     <>
-                      {input("internals", "Total Internals")}
+                      {input(s.mode === "total" ? "internals" : "internals50", "Total Internals")}
                       {input("endSem", "End Semester")}
                     </>
                   )}
