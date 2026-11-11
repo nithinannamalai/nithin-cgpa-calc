@@ -67,11 +67,11 @@ function GpaPage() {
 
       <form
         onSubmit={(e) => { e.preventDefault(); add(); }}
-        className="glass mt-6 flex flex-col gap-2 rounded-2xl p-3 sm:flex-row"
+        className="glass mt-6 grid grid-cols-[minmax(0,1fr)_5.5rem] gap-2 rounded-2xl p-3 sm:flex sm:flex-row"
       >
-        <input className="field flex-1" placeholder="Course name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input className="field sm:w-32" placeholder="Credits" type="number" min="0" step="0.5" inputMode="decimal" value={credits} onChange={(e) => setCredits(e.target.value)} />
-        <button className="btn-primary" type="submit"><Plus size={18} /> Save course</button>
+        <input className="field min-w-0 sm:flex-1" placeholder="Course name" enterKeyHint="next" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
+        <input className="field min-w-0 sm:w-32" placeholder="Credits" type="number" min="0" step="0.5" inputMode="decimal" enterKeyHint="done" value={credits} onChange={(e) => setCredits(e.target.value)} />
+        <button className="btn-primary col-span-2" type="submit"><Plus size={18} /> Save course</button>
       </form>
 
       <button
@@ -117,10 +117,10 @@ function GpaPage() {
         {courses.map((c) => (
           <li key={c.id} className="glass animate-rise rounded-2xl p-4">
             {editing === c.id ? (
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <input className="field flex-1" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
-                <input className="field sm:w-28" type="number" min="0" step="0.5" value={draft.credits} onChange={(e) => setDraft({ ...draft, credits: e.target.value })} />
-                <div className="flex gap-2">
+              <div className="grid grid-cols-[minmax(0,1fr)_5.5rem] gap-2 sm:flex sm:flex-row">
+                <input className="field min-w-0 sm:flex-1" aria-label="Course name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
+                <input className="field min-w-0 sm:w-28" aria-label="Credits" type="number" min="0" step="0.5" inputMode="decimal" value={draft.credits} onChange={(e) => setDraft({ ...draft, credits: e.target.value })} />
+                <div className="col-span-2 flex gap-2">
                   <button className="btn-primary flex-1" onClick={() => {
                     const cr = Number(draft.credits);
                     if (draft.name.trim() && cr > 0) update(c.id, { name: draft.name.trim(), credits: cr });
