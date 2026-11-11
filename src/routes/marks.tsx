@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Plus, RotateCcw, Trash2 } from "lucide-react";
 import { Fragment } from "react";
 import { Shell } from "@/components/Shell";
-import { MARK_LIMITS, calcMarks, clampMark, type MarkField, type MarksSubject } from "@/lib/marks";
+import { MARK_LIMITS, applyMarksPatch, calcMarks, clampMark, endSemForTotal, type MarkField, type MarksSubject } from "@/lib/marks";
 import { useLocal, uid } from "@/lib/storage";
 
 export const Route = createFileRoute("/marks")({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/marks")({
 });
 
 const blank = (n: number): MarksSubject => ({
-  id: uid(), name: `Subject ${n}`, mode: "split", i1: "", i2: "", tw: "", internals: "", internals50: "", endSem: "",
+  id: uid(), name: `Subject ${n}`, mode: "split", i1: "", i2: "", tw: "", internals: "", internals50: "", endSem: "", target: "",
 });
 
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
@@ -28,7 +28,7 @@ const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
 function MarksPage() {
   const [subjects, setSubjects] = useLocal<MarksSubject[]>("marks-subjects", [blank(1)]);
   const update = (id: string, patch: Partial<MarksSubject>) =>
-    setSubjects(subjects.map((s) => (s.id === id ? { ...s, ...patch } : s)));
+    setSubjects(subjects.map((s) => (s.id === id ? applyMarksPatch(s, patch) : s)));
 
   return (
     <Shell>
@@ -57,6 +57,7 @@ function MarksPage() {
             <label className="block">
               <span className="mb-1 block text-xs text-muted-foreground">
                 {label} <span className="opacity-70">/{MARK_LIMITS[k]}</span>
+                {k === "endSem" && s.target ? <span className="ml-1 font-semibold text-tertiary">· auto</span> : null}
               </span>
               <input
                 className="field w-full"
@@ -107,7 +108,7 @@ function MarksPage() {
               <div className="mt-3 flex items-center gap-1 rounded-3xl p-1 [background:oklch(0.1_0.04_240/30%)]">
                 {([["split", "Tests & Term Work"], ["total", "Total internals /40"], ["total50", "Total internals /50"]] as const).map(([m, label], i) => (
                   <Fragment key={m}>
-                    {i > 0 && <span className="shrink-0 px-0.5 text-[10px] font-semibold uppercase text-muted-foreground sm:px-1 sm:text-xs">or</span>}
+                    {i > 0 && <span className="or-badge shrink-0">or</span>}
                     <button
                       onClick={() => update(s.id, { mode: m })}
                       data-active={s.mode === m}
@@ -135,10 +136,28 @@ function MarksPage() {
                     </>
                   )}
                 </div>
-                <div className="flex flex-col items-center justify-center rounded-2xl px-6 py-2 text-center">
-                  <div className="text-xs uppercase tracking-widest text-muted-foreground">Total</div>
-                  <div className="text-gradient font-display text-5xl font-bold">{fmt(r.total)}</div>
-                  <div className="text-xs text-muted-foreground">out of 100</div>
+                <div className="flex flex-col items-center justify-center gap-2 rounded-2xl px-4 py-2 text-center">
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-muted-foreground">Total</div>
+                    <div className="text-gradient font-display text-5xl font-bold">{fmt(r.total)}</div>
+                    <div className="text-xs text-muted-foreground">out of 100</div>
+                  </div>
+                  <label className="block w-40">
+                    <span className="mb-1 block text-xs text-muted-foreground">Want a total of?</span>
+                    <input
+                      className="field w-full text-center font-semibold"
+                      type="number"
+                      min="0"
+                      max={100}
+                      step="0.5"
+                      inputMode="decimal"
+                      placeholder="e.g. 75"
+                      aria-label="Target total out of 100"
+                      value={s.target ?? ""}
+                      onChange={(e) => update(s.id, { target: clampMark(e.target.value, 100) })}
+                    />
+                  </label>
+                  {s.target ? <TargetHint s={s} /> : null}
                 </div>
               </div>
 
@@ -161,5 +180,17 @@ function MarksPage() {
         })}
       </ul>
     </Shell>
+  );
+}
+
+function TargetHint({ s }: { s: MarksSubject }) {
+  const r = endSemForTotal(s, Number(s.target));
+  if (r.needed > MARK_LIMITS.endSem)
+    return <p className="max-w-40 text-xs font-semibold text-destructive">Needs {fmt(r.needed)} in End Sem — not possible</p>;
+  if (r.needed < 0) return <p className="max-w-40 text-xs font-semibold text-success">Already reached with internals</p>;
+  return (
+    <p className="max-w-40 text-xs text-muted-foreground">
+      End Sem needed: <span className="font-bold text-tertiary">{fmt(r.endSem)}</span> / 100
+    </p>
   );
 }

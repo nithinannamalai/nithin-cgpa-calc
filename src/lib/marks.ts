@@ -19,6 +19,8 @@ export type MarksSubject = {
   internals: string;
   internals50?: string;
   endSem: string;
+  /** Final total (/100) the student wants; when set, End Sem is worked out from it. */
+  target?: string;
 };
 
 const num = (v: string | undefined) => {
@@ -50,4 +52,25 @@ export function calcMarks(s: Pick<MarksSubject, "mode" | "i1" | "i2" | "tw" | "i
   const internals = s.mode === "total" ? Math.min(num(s.internals), MARK_LIMITS.internals) : i1 + i2 + tw;
   const endSem = end * 0.6;
   return { i1, i2, tw, internals, endSem, total: internals + endSem };
+}
+
+/** End Sem mark (/100) needed to reach a final total, keeping the subject's internals as they are. */
+export function endSemForTotal(s: Pick<MarksSubject, "mode" | "i1" | "i2" | "tw" | "internals" | "internals50">, total: number) {
+  const { internals } = calcMarks({ ...s, endSem: "" });
+  const factor = s.mode === "total50" ? 0.5 : 0.6;
+  const needed = (total - internals) / factor;
+  const endSem = Math.round(Math.min(Math.max(needed, 0), MARK_LIMITS.endSem) * 100) / 100;
+  return { needed, endSem, reachable: needed >= 0 && needed <= MARK_LIMITS.endSem };
+}
+
+/**
+ * Apply an edit to a subject. Typing End Sem directly clears the target total;
+ * while a target total is set, only End Sem is recalculated from it.
+ */
+export function applyMarksPatch(s: MarksSubject, patch: Partial<MarksSubject>): MarksSubject {
+  const next = { ...s, ...patch };
+  if ("endSem" in patch && !("target" in patch)) return { ...next, target: "" };
+  const t = (next.target ?? "").trim();
+  if (t !== "" && Number.isFinite(Number(t))) next.endSem = String(endSemForTotal(next, Number(t)).endSem);
+  return next;
 }
