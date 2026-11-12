@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calcGPA, calcCGPA, calcCreditWeightedCGPA, requiredGPA, GRADE_POINTS, parseGPAList } from "@/lib/gpa";
+import { calcGPA, calcCGPA, calcCreditWeightedCGPA, requiredGPA, requiredGPAForSemesters, requiredGPACreditWeighted, GRADE_POINTS, parseGPAList } from "@/lib/gpa";
 
 describe("gpa rules", () => {
   it("maps grades to points", () => {
@@ -48,5 +48,17 @@ describe("gpa rules", () => {
   });
   it("required GPA = 2*target - previous CGPA", () => {
     expect(requiredGPA(8, 8.5)).toBeCloseTo(9);
+  });
+  it("estimated required GPA = target × (N + 1) − current × N", () => {
+    expect(requiredGPAForSemesters(8, 8.5, 3)).toBeCloseTo(10);
+    expect(requiredGPAForSemesters(8, 8.5, 1)).toBeCloseTo(9);
+    expect(requiredGPAForSemesters(8, 8.5, 0)).toBeCloseTo(8.5);
+  });
+  it("credit-weighted required GPA = [target × (prev + upcoming) − current × prev] / upcoming", () => {
+    expect(requiredGPACreditWeighted(8, 8.5, 60, 20)).toBeCloseTo(10);
+    expect(requiredGPACreditWeighted(8, 8.5, 0, 20)).toBeCloseTo(8.5);
+  });
+  it("credit-weighted required GPA is NaN without upcoming credits", () => {
+    expect(Number.isNaN(requiredGPACreditWeighted(8, 8.5, 60, 0))).toBe(true);
   });
 });
