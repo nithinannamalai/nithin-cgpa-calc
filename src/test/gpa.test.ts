@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calcGPA, calcCGPA, requiredGPA, GRADE_POINTS, parseGPAList } from "@/lib/gpa";
+import { calcGPA, calcCGPA, calcCreditWeightedCGPA, requiredGPA, GRADE_POINTS, parseGPAList } from "@/lib/gpa";
 
 describe("gpa rules", () => {
   it("maps grades to points", () => {
@@ -23,6 +23,18 @@ describe("gpa rules", () => {
   });
   it("CGPA = simple average of semester GPAs", () => {
     expect(calcCGPA([{ id: "1", gpa: 8 }, { id: "2", gpa: 9 }])).toBeCloseTo(8.5);
+  });
+  it("credit-weighted CGPA = sum(GPA × credits) / sum(credits)", () => {
+    const result = calcCreditWeightedCGPA([
+      { id: "1", gpa: 8, credits: 20 },
+      { id: "2", gpa: 9, credits: 24 },
+    ]);
+    expect(result.totalCredits).toBe(44);
+    expect(result.totalPoints).toBe(376);
+    expect(result.cgpa).toBeCloseTo(376 / 44);
+  });
+  it("credit-weighted CGPA is 0 when there are no credits", () => {
+    expect(calcCreditWeightedCGPA([]).cgpa).toBe(0);
   });
   it("parses comma-separated GPAs into Sem 1, Sem 2, ... and flags values above 10", () => {
     const r = parseGPAList("8.5, 9 ,11, abc");

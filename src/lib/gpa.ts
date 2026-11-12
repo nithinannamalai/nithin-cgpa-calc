@@ -19,6 +19,14 @@ export function calcCGPA(sems: Semester[]) {
   return sems.reduce((s, x) => s + (x.gpa || 0), 0) / sems.length;
 }
 
+export type CreditSemester = { id: string; gpa: number; credits: number };
+/** Credit-weighted CGPA: sum(GPA × credits) / sum(credits). */
+export function calcCreditWeightedCGPA(sems: CreditSemester[]) {
+  const totalCredits = sems.reduce((sum, sem) => sum + sem.credits, 0);
+  const totalPoints = sems.reduce((sum, sem) => sum + sem.gpa * sem.credits, 0);
+  return { totalCredits, totalPoints, cgpa: totalCredits > 0 ? totalPoints / totalCredits : 0 };
+}
+
 export type ParsedSem = { label: string; raw: string; gpa: number; valid: boolean; reason?: "over" | "nan" };
 /** Parse "8.5, 9, 7.2" into Sem 1, Sem 2, ... Entries above 10 or non-numbers are flagged invalid. */
 export function parseGPAList(input: string): ParsedSem[] {
