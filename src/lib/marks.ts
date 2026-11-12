@@ -74,3 +74,18 @@ export function applyMarksPatch(s: MarksSubject, patch: Partial<MarksSubject>): 
   if (t !== "" && Number.isFinite(Number(t))) next.endSem = String(endSemForTotal(next, Number(t)).endSem);
   return next;
 }
+
+/** Grade bands for a final total /100: O 91–100, A+ 81–90, A 71–80, B+ 61–70, B 56–60, C 50–55, U below 50. */
+export const MARK_GRADE_BANDS = [
+  { grade: "O", min: 91 },
+  { grade: "A+", min: 81 },
+  { grade: "A", min: 71 },
+  { grade: "B+", min: 61 },
+  { grade: "B", min: 56 },
+  { grade: "C", min: 50 },
+  { grade: "U", min: 0 },
+] as const;
+
+export function gradeForTotal(total: number) {
+  return (MARK_GRADE_BANDS.find((b) => total >= b.min) ?? MARK_GRADE_BANDS[MARK_GRADE_BANDS.length - 1]!).grade;
+}
