@@ -63,7 +63,7 @@ function Field({
   );
 }
 
-function Result({ label, req, ready, problem, note }: { label: string; req: number; ready: boolean; problem?: string; note: string }) {
+function Result({ label, req, ready, problem, note }: { label: string; req: number; ready: boolean; problem: string | undefined; note: string }) {
   let msg = "Fill in every field to see your required GPA.";
   let tone = "text-muted-foreground";
   if (problem) {
