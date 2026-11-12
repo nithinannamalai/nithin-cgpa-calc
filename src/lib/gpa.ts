@@ -47,3 +47,20 @@ export function parseGPAList(input: string): ParsedSem[] {
 export function requiredGPA(prevCGPA: number, target: number) {
   return 2 * target - prevCGPA;
 }
+
+/**
+ * Estimated GPA needed next semester: target × (N + 1) − current × N,
+ * where N = semesters completed so far (all semesters weighted equally).
+ */
+export function requiredGPAForSemesters(currentCGPA: number, target: number, semestersCompleted: number) {
+  return target * (semestersCompleted + 1) - currentCGPA * semestersCompleted;
+}
+
+/**
+ * Accurate credit-weighted GPA needed in the upcoming semester:
+ * [target × (prevCredits + upcomingCredits) − current × prevCredits] / upcomingCredits.
+ */
+export function requiredGPACreditWeighted(currentCGPA: number, target: number, prevCredits: number, upcomingCredits: number) {
+  if (!(upcomingCredits > 0)) return NaN;
+  return (target * (prevCredits + upcomingCredits) - currentCGPA * prevCredits) / upcomingCredits;
+}
