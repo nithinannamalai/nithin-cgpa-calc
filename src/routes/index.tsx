@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, Check, X, Share2, GraduationCap } from "lucide-react";
 import { Shell, Stat } from "@/components/Shell";
+import { FloatingGPA } from "@/components/FloatingGPA";
 import { GRADES, GRADE_POINTS, calcGPA, type Course, type Grade } from "@/lib/gpa";
 import { useLocal, uid } from "@/lib/storage";
 
@@ -153,6 +154,7 @@ function GpaPage() {
           </li>
         ))}
       </ul>
+      <FloatingGPA gpa={gpa} credits={totalCredits} />
     </Shell>
   );
 }
