@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Plus, RotateCcw, Trash2 } from "lucide-react";
 import { Fragment } from "react";
 import { Shell } from "@/components/Shell";
-import { MARK_LIMITS, applyMarksPatch, calcMarks, clampMark, endSemForTotal, type MarkField, type MarksSubject } from "@/lib/marks";
+import { MARK_LIMITS, applyMarksPatch, calcMarks, clampMark, endSemForTotal, gradeForTotal, type MarkField, type MarksSubject } from "@/lib/marks";
 import { useLocal, uid } from "@/lib/storage";
 
 export const Route = createFileRoute("/marks")({
@@ -141,6 +141,10 @@ function MarksPage() {
                     <div className="text-xs uppercase tracking-widest text-muted-foreground">Total</div>
                     <div className="text-gradient font-display text-5xl font-bold">{fmt(r.total)}</div>
                     <div className="text-xs text-muted-foreground">out of 100</div>
+                    <div className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold">
+                      <span className="text-muted-foreground">Grade</span>
+                      <span className={`font-display text-sm font-bold ${gradeForTotal(r.total) === "U" ? "text-destructive" : "text-tertiary"}`}>{gradeForTotal(r.total)}</span>
+                    </div>
                   </div>
                   <label className="block w-40">
                     <span className="mb-1 block text-xs text-muted-foreground">Want a total of?</span>
