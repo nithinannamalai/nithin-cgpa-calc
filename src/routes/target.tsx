@@ -127,7 +127,7 @@ function TargetPage() {
       type="button"
       aria-pressed={mode === m}
       onClick={() => setMode(m)}
-      className={`rounded-xl px-3 py-2.5 text-sm font-semibold transition-all ${mode === m ? "bg-primary text-primary-foreground shadow-glow" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
+      className={`min-w-0 flex-1 rounded-xl px-2 py-2.5 text-sm font-semibold transition-all ${mode === m ? "bg-primary text-primary-foreground shadow-glow" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
     >
       {label}
     </button>
@@ -138,16 +138,19 @@ function TargetPage() {
       <h1 className="font-display text-3xl font-bold sm:text-5xl">GPA required this sem</h1>
       <p className="mt-1 text-muted-foreground">Choose a quick estimate or an accurate credit-weighted calculation</p>
 
-      <div className="glass animate-rise mt-6 grid grid-cols-2 gap-2 rounded-2xl p-2" role="group" aria-label="Required GPA calculation mode">
+      <div className="glass animate-rise mt-6 flex items-center gap-2 rounded-2xl p-2" role="group" aria-label="Required GPA calculation mode">
         {modeButton("gpa", "GPA Only")}
+        <span className="or-badge shrink-0">or</span>
         {modeButton("credits", "GPA + Credits")}
       </div>
 
       {mode === "gpa" ? (
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <div className="glass space-y-4 rounded-2xl p-5">
-            <Field label="Current CGPA" value={f.prev} onChange={(v) => setF({ ...f, prev: v })} placeholder="e.g. 8.2" invalid={f.prev.trim() !== "" && !prevOk} />
-            <Field label="Target CGPA" value={f.target} onChange={(v) => setF({ ...f, target: v })} placeholder="e.g. 8.5" invalid={f.target.trim() !== "" && !targetOk} />
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Current CGPA" value={f.prev} onChange={(v) => setF({ ...f, prev: v })} placeholder="e.g. 8.2" invalid={f.prev.trim() !== "" && !prevOk} />
+              <Field label="Target CGPA" value={f.target} onChange={(v) => setF({ ...f, target: v })} placeholder="e.g. 8.5" invalid={f.target.trim() !== "" && !targetOk} />
+            </div>
             <Field
               label="Semesters Completed (N)"
               value={f.sems}
@@ -170,8 +173,10 @@ function TargetPage() {
       ) : (
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <div className="glass space-y-4 rounded-2xl p-5">
-            <Field label="Current CGPA" value={cf.prev} onChange={(v) => setCF({ ...cf, prev: v })} placeholder="e.g. 8.2" invalid={cf.prev.trim() !== "" && !cPrevOk} />
-            <Field label="Target CGPA" value={cf.target} onChange={(v) => setCF({ ...cf, target: v })} placeholder="e.g. 8.5" invalid={cf.target.trim() !== "" && !cTargetOk} />
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Current CGPA" value={cf.prev} onChange={(v) => setCF({ ...cf, prev: v })} placeholder="e.g. 8.2" invalid={cf.prev.trim() !== "" && !cPrevOk} />
+              <Field label="Target CGPA" value={cf.target} onChange={(v) => setCF({ ...cf, target: v })} placeholder="e.g. 8.5" invalid={cf.target.trim() !== "" && !cTargetOk} />
+            </div>
             <div className="grid grid-cols-2 gap-3">
               <Field
                 label="Total Credits Completed"

@@ -6,8 +6,12 @@ type Pos = { x: number; y: number };
 const KEY = "gpa-float-pos";
 const MARGIN = 8;
 
+const PHONE = 640;
 const clamp = (p: Pos, el: HTMLElement): Pos => ({
-  x: Math.min(Math.max(p.x, MARGIN), window.innerWidth - el.offsetWidth - MARGIN),
+  // Phone: stay pinned to the right edge — only up/down movement applies.
+  x: window.innerWidth < PHONE
+    ? window.innerWidth - el.offsetWidth - MARGIN
+    : Math.min(Math.max(p.x, MARGIN), window.innerWidth - el.offsetWidth - MARGIN),
   y: Math.min(Math.max(p.y, MARGIN), window.innerHeight - el.offsetHeight - MARGIN),
 });
 
