@@ -55,20 +55,21 @@ function CgpaPage() {
       <h1 className="font-display text-3xl font-bold sm:text-5xl">Overall CGPA</h1>
       <p className="mt-1 text-muted-foreground">Choose a quick estimate or an accurate credit-weighted calculation</p>
 
-      <div className="glass animate-rise mt-6 grid grid-cols-2 gap-2 rounded-2xl p-2" role="group" aria-label="CGPA calculation mode">
+      <div className="glass animate-rise mt-6 flex items-center gap-2 rounded-2xl p-2" role="group" aria-label="CGPA calculation mode">
         <button
           type="button"
           aria-pressed={mode === "gpa"}
           onClick={() => setMode("gpa")}
-          className={`rounded-xl px-3 py-2.5 text-sm font-semibold transition-all ${mode === "gpa" ? "bg-primary text-primary-foreground shadow-glow" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
+          className={`min-w-0 flex-1 rounded-xl px-2 py-2.5 text-sm font-semibold transition-all ${mode === "gpa" ? "bg-primary text-primary-foreground shadow-glow" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
         >
           GPA Only
         </button>
+        <span className="or-badge shrink-0">or</span>
         <button
           type="button"
           aria-pressed={mode === "credits"}
           onClick={() => setMode("credits")}
-          className={`rounded-xl px-3 py-2.5 text-sm font-semibold transition-all ${mode === "credits" ? "bg-primary text-primary-foreground shadow-glow" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
+          className={`min-w-0 flex-1 rounded-xl px-2 py-2.5 text-sm font-semibold transition-all ${mode === "credits" ? "bg-primary text-primary-foreground shadow-glow" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
         >
           Credit-Weighted
         </button>
