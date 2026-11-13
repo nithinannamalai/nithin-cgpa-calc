@@ -136,7 +136,7 @@ function TargetPage() {
   return (
     <Shell>
       <h1 className="font-display text-3xl font-bold sm:text-5xl">GPA required this sem</h1>
-      <p className="mt-1 text-muted-foreground">Choose a quick estimate or an accurate credit-weighted calculation</p>
+      <p className="mt-1 text-muted-foreground">Choose approx. calculation or an accurate credit-weighted calculation</p>
 
       <div className="glass animate-rise mt-6 flex items-center gap-2 rounded-2xl p-2" role="group" aria-label="Required GPA calculation mode">
         {modeButton("gpa", "GPA Only")}
@@ -160,7 +160,7 @@ function TargetPage() {
               max="12"
               invalid={f.sems.trim() !== "" && !semsOk}
             />
-            <p className="text-xs text-muted-foreground">Required GPA = Target × (N + 1) − Current × N</p>
+            <p className="text-xs text-muted-foreground">{"\n"}</p>
           </div>
           <Result
             label="Estimated Required GPA"
