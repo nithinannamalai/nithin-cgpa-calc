@@ -136,7 +136,7 @@ function TargetPage() {
   return (
     <Shell>
       <h1 className="font-display text-3xl font-bold sm:text-5xl">GPA required this sem</h1>
-      <p className="mt-1 text-muted-foreground">Choose approx. calculation or an accurate credit-weighted calculation</p>
+      <p className="mt-1 text-muted-foreground">Choose approx. or an accurate credit-weighted calculation</p>
 
       <div className="glass animate-rise mt-6 flex items-center gap-2 rounded-2xl p-2" role="group" aria-label="Required GPA calculation mode">
         {modeButton("gpa", "GPA Only")}
