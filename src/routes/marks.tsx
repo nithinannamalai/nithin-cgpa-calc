@@ -56,7 +56,7 @@ function MarksPage() {
           const input = (k: MarkField, label: string) => (
             <label className="block">
               <span className="mb-1 block text-xs text-muted-foreground">
-                {label}{k === "endSem" ? "\u00a0" : " "}<span className="opacity-70">({k === "endSem" ? "" : " "}/{MARK_LIMITS[k]})</span>
+                {label}{k === "endSem" ? "\u00a0(" : " ("}<span className="opacity-70">{k === "endSem" ? "\u00a0" : " "}/{MARK_LIMITS[k]})</span>
                 {k === "endSem" && s.target ? <span className="ml-1 font-semibold text-tertiary">· auto</span> : null}
               </span>
               <input
