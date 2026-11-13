@@ -81,7 +81,7 @@ function GpaPage() {
         className="glass mt-6 grid grid-cols-[minmax(0,1fr)_5rem_auto] gap-2 rounded-2xl p-3 sm:flex sm:flex-row"
       >
         <input ref={nameRef} className="field min-w-0 sm:flex-1" placeholder="Course name" enterKeyHint="next" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={nextOnEnter(creditsRef)} />
-        <input ref={creditsRef} className="field min-w-0 max-sm:!px-2.5 sm:w-32" placeholder="Credits" type="number" min="0" step="0.5" inputMode="decimal" enterKeyHint="done" value={credits} onChange={(e) => setCredits(e.target.value)} />
+        <input ref={creditsRef} className="field min-w-0 max-sm:!px-2.5 max-sm:[appearance:textfield] max-sm:[&::-webkit-inner-spin-button]:appearance-none sm:w-32" placeholder="Credits" type="number" min="0" step="0.5" inputMode="decimal" enterKeyHint="done" value={credits} onChange={(e) => setCredits(e.target.value)} />
         <button className="btn-primary max-sm:!px-3" type="submit" aria-label="Save course"><Plus size={18} /> <span className="sm:hidden">Save</span><span className="hidden sm:inline">Save course</span></button>
       </form>
 
