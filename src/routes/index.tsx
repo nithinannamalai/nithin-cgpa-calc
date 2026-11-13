@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, Check, X, Share2, GraduationCap } from "lucide-react";
 import { Shell, Stat } from "@/components/Shell";
@@ -34,7 +34,7 @@ function GpaPage() {
   const creditsRef = useRef<HTMLInputElement>(null);
   const draftCreditsRef = useRef<HTMLInputElement>(null);
   // Phone keyboard "next" arrow sends Enter: move focus to the next box instead of submitting.
-  const nextOnEnter = (next: React.RefObject<HTMLInputElement | null>) => (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const nextOnEnter = (next: RefObject<HTMLInputElement | null>) => (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") return;
     e.preventDefault();
     next.current?.focus();
