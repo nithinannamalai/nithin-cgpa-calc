@@ -197,14 +197,14 @@ function TargetPage() {
                 invalid={cf.upcomingCredits.trim() !== "" && !upcomingCreditsOk}
               />
             </div>
-            <p className="text-xs text-muted-foreground">Required GPA = [Target × (Prev + Upcoming) − Current × Prev] / Upcoming</p>
+            <p className="text-xs text-muted-foreground">{"\"Upcoming Sem Credits are the credit points for the next semester you want to calculate.\""}</p>
           </div>
           <Result
             label="Accurate Credit-Weighted Required GPA"
             req={creditReq}
             ready={creditReady}
             problem={creditProblem}
-            note="Uses your real credit loads: CGPA = Σ(GPA × Credits) / Σ(Credits)."
+            note="\n"
           />
         </div>
       )}
