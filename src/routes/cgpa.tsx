@@ -3,6 +3,7 @@ import { AlertTriangle, Plus, Trash2 } from "lucide-react";
 import { Shell, Stat } from "@/components/Shell";
 import { calcCGPA, calcCreditWeightedCGPA, parseGPAList } from "@/lib/gpa";
 import { uid, useLocal } from "@/lib/storage";
+import { useEffect, useState, type KeyboardEvent } from "react";
 
 export const Route = createFileRoute("/cgpa")({
   head: () => ({
@@ -45,6 +46,33 @@ function CgpaPage() {
   const validCreditEntries = parsedCreditEntries.filter((entry) => entry.valid);
   const invalidCreditEntries = parsedCreditEntries.filter((entry) => entry.hasInput && !entry.valid);
   const weighted = calcCreditWeightedCGPA(validCreditEntries);
+
+  // Newly added rows get focus once rendered, so typing can continue straight away.
+  const [focusId, setFocusId] = useState<string | null>(null);
+  useEffect(() => {
+    if (!focusId) return;
+    document.querySelector<HTMLInputElement>(`[data-sem-gpa="${focusId}"]`)?.focus();
+    setFocusId(null);
+  }, [focusId, creditEntries]);
+  const addSemester = () => {
+    const entry = emptyCreditEntry();
+    setCreditEntries((entries) => [...entries, entry]);
+    setFocusId(entry.id);
+  };
+  // Phone keyboard "next" arrow sends Enter: GPA → Credits → next semester's GPA (adds one at the end).
+  const onGpaEnter = (id: string) => (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    document.querySelector<HTMLInputElement>(`[data-sem-credits="${id}"]`)?.focus();
+  };
+  const onCreditsEnter = (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    const next = creditEntries[index + 1];
+    if (next) document.querySelector<HTMLInputElement>(`[data-sem-gpa="${next.id}"]`)?.focus();
+    else if (parsedCreditEntries[index]?.hasInput) addSemester();
+    else e.currentTarget.blur();
+  };
 
   const updateCreditEntry = (id: string, field: "gpa" | "credits", value: string) => {
     setCreditEntries((entries) => entries.map((entry) => (entry.id === id ? { ...entry, [field]: value } : entry)));
@@ -141,7 +169,7 @@ function CgpaPage() {
                       <Trash2 size={17} />
                     </button>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className={`grid items-end gap-3 ${index === creditEntries.length - 1 ? "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]" : "grid-cols-2"}`}>
                     <label>
                       <span className="mb-1.5 block text-xs uppercase tracking-widest text-muted-foreground">GPA / 10</span>
                       <input
@@ -150,8 +178,11 @@ function CgpaPage() {
                         max="10"
                         step="0.01"
                         inputMode="decimal"
-                        className="field w-full"
+                        className="field w-full max-sm:[appearance:textfield] max-sm:[&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="8.5"
+                        enterKeyHint="next"
+                        data-sem-gpa={entry.id}
+                        onKeyDown={onGpaEnter(entry.id)}
                         value={entry.gpa}
                         aria-label={`Semester ${index + 1} GPA`}
                         aria-invalid={parsed?.hasInput && !parsed.gpaValid}
@@ -165,14 +196,22 @@ function CgpaPage() {
                         min="0"
                         step="0.5"
                         inputMode="decimal"
-                        className="field w-full"
+                        className="field w-full max-sm:[appearance:textfield] max-sm:[&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="20"
+                        enterKeyHint="next"
+                        data-sem-credits={entry.id}
+                        onKeyDown={onCreditsEnter(index)}
                         value={entry.credits}
                         aria-label={`Semester ${index + 1} credits`}
                         aria-invalid={parsed?.hasInput && !parsed.creditsValid}
                         onChange={(e) => updateCreditEntry(entry.id, "credits", e.target.value)}
                       />
                     </label>
+                    {index === creditEntries.length - 1 && (
+                      <button type="button" className="btn-primary max-sm:!px-3" onClick={addSemester} aria-label="Add semester">
+                        <Plus size={18} /> <span className="sm:hidden">Add</span><span className="hidden sm:inline">Add semester</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -186,9 +225,11 @@ function CgpaPage() {
             </div>
           )}
 
-          <button type="button" className="clay-pill mt-4" onClick={() => setCreditEntries((entries) => [...entries, emptyCreditEntry()])}>
-            <Plus size={17} /> Add semester
-          </button>
+          {creditEntries.length === 0 && (
+            <button type="button" className="clay-pill mt-4" onClick={addSemester}>
+              <Plus size={17} /> Add semester
+            </button>
+          )}
         </>
       )}
     </Shell>
