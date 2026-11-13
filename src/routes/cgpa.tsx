@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, Plus, Trash2 } from "lucide-react";
-import { Shell, Stat } from "@/components/Shell";
+import { Shell, Stat, GuidanceLink } from "@/components/Shell";
 import { calcCGPA, calcCreditWeightedCGPA, parseGPAList } from "@/lib/gpa";
 import { uid, useLocal } from "@/lib/storage";
 import { useEffect, useState, type KeyboardEvent } from "react";
@@ -80,8 +80,13 @@ function CgpaPage() {
 
   return (
     <Shell>
-      <h1 className="font-display text-3xl font-bold sm:text-5xl">Overall CGPA</h1>
-      <p className="mt-1 text-muted-foreground">Choose approx. or an accurate credit-weighted calculation</p>
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
+        <div>
+          <h1 className="font-display text-3xl font-bold sm:text-5xl">Overall CGPA</h1>
+          <p className="mt-1 text-muted-foreground">Choose approx. or an accurate credit-weighted calculation</p>
+        </div>
+        <GuidanceLink />
+      </div>
 
       <div className="glass animate-rise mt-6 flex items-center gap-2 rounded-2xl p-2" role="group" aria-label="CGPA calculation mode">
         <button

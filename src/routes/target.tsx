@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Shell } from "@/components/Shell";
+import { Shell, GuidanceLink } from "@/components/Shell";
 import { requiredGPACreditWeighted, requiredGPAForSemesters } from "@/lib/gpa";
 import { useLocal } from "@/lib/storage";
 
@@ -63,7 +63,7 @@ function Field({
   );
 }
 
-function Result({ label, req, ready, problem, note }: { label: string; req: number; ready: boolean; problem: string | undefined; note: string }) {
+function Result({ label, req, ready, problem, note }: { label: string; req: number; ready: boolean; problem: string | undefined; note?: string }) {
   let msg = "Fill in every field to see your required GPA.";
   let tone = "text-muted-foreground";
   if (problem) {
@@ -76,14 +76,16 @@ function Result({ label, req, ready, problem, note }: { label: string; req: numb
     else { msg = "Very doable. Stay consistent!"; tone = "text-success"; }
   }
 
+  const cleanNote = note?.trim();
+
   return (
-    <div className="glass flex flex-col items-center justify-center rounded-2xl p-6 text-center sm:p-8">
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
-      <div key={String(req)} className="text-gradient animate-rise font-display text-6xl font-bold sm:text-7xl">
+    <div className="glass flex flex-col items-center justify-center !rounded-[2rem] p-6 text-center sm:p-8 transition-all duration-300 hover:border-white/25 hover:shadow-xl">
+      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-muted-foreground/90">{label}</div>
+      <div key={String(req)} className="mt-1 animate-rise font-display text-6xl font-extrabold sm:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-green-400 drop-shadow-[0_2px_18px_rgba(52,211,153,0.35)]">
         {ready && Number.isFinite(req) ? Math.max(0, req).toFixed(2) : "—"}
       </div>
       <p className={`mt-3 ${tone}`}>{msg}</p>
-      <p className="mt-4 text-xs italic text-muted-foreground">{note}</p>
+      {cleanNote ? <p className="mt-4 text-xs italic text-muted-foreground">{cleanNote}</p> : null}
     </div>
   );
 }
@@ -135,8 +137,13 @@ function TargetPage() {
 
   return (
     <Shell>
-      <h1 className="font-display text-3xl font-bold sm:text-5xl">GPA required this sem</h1>
-      <p className="mt-1 text-muted-foreground">Choose approx. or an accurate credit-weighted calculation</p>
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
+        <div>
+          <h1 className="font-display text-3xl font-bold sm:text-5xl">GPA required this sem</h1>
+          <p className="mt-1 text-muted-foreground">Choose approx. or an accurate credit-weighted calculation</p>
+        </div>
+        <GuidanceLink />
+      </div>
 
       <div className="glass animate-rise mt-6 flex items-center gap-2 rounded-2xl p-2" role="group" aria-label="Required GPA calculation mode">
         {modeButton("gpa", "GPA Only")}
@@ -160,7 +167,6 @@ function TargetPage() {
               max="12"
               invalid={f.sems.trim() !== "" && !semsOk}
             />
-            <p className="text-xs text-muted-foreground">{"\n"}</p>
           </div>
           <Result
             label="Estimated Required GPA"
@@ -197,14 +203,13 @@ function TargetPage() {
                 invalid={cf.upcomingCredits.trim() !== "" && !upcomingCreditsOk}
               />
             </div>
-            <p className="text-xs text-muted-foreground">{"\"Upcoming Sem Credits are the credit points for the next semester you want to calculate.\""}</p>
+            <p className="text-xs text-muted-foreground">{"Upcoming Sem Credits are the credit points for the next semester you want to calculate."}</p>
           </div>
           <Result
             label="Accurate Credit-Weighted Required GPA"
             req={creditReq}
             ready={creditReady}
             problem={creditProblem}
-            note="\n"
           />
         </div>
       )}

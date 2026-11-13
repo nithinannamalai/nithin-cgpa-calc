@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus, RotateCcw, Trash2 } from "lucide-react";
 import { Fragment } from "react";
-import { Shell } from "@/components/Shell";
+import { Shell, GuidanceLink } from "@/components/Shell";
 import { MARK_LIMITS, applyMarksPatch, calcMarks, clampMark, endSemForTotal, gradeForTotal, type MarkField, type MarksSubject } from "@/lib/marks";
 import { useLocal, uid } from "@/lib/storage";
 
@@ -32,8 +32,10 @@ function MarksPage() {
 
   return (
     <Shell>
-      <h1 className="font-display text-3xl font-bold sm:text-5xl">End Semester Mark</h1>
-      <p className="mt-1 text-muted-foreground">{"\n"}</p>
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
+        <h1 className="font-display text-3xl font-bold sm:text-5xl">End Semester Mark</h1>
+        <GuidanceLink />
+      </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
         <button className="btn-primary" onClick={() => setSubjects([...subjects, blank(subjects.length + 1)])}>

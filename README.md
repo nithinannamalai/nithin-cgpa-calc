@@ -1,26 +1,29 @@
-# Nithin Cgpa Calc
+# CalCGPA — University GPA & CGPA Calculator
 
-build me a phone+desktop compatible GPA, CGPA calculator app. Should be able to enter, edit or remove course name, credit count and save. then i can edit the credit point (O,A+,A,B+,B,C,U) and it should calculate by the formula (credit count*scored point[10 for O grade, 9 for A+,8 for A, 7 for B+, 6 for B,5 for C, 0 for U) then i need "GPA required for this sem" page where user enters his previous CGPA and target CGPA and finds required GPA for current sem. Make website very attractive with Glass UI, smooth transitions, blurred background image, etc
+A phone and desktop responsive GPA & CGPA calculation app with a liquid glassmorphic UI, real-time calculations, and comprehensive calculation guidance.
 
-This project was built with [Lovable](https://lovable.dev).
+Developed by **R.Nithin Annamalai**.
 
-**Live app**: https://nithin-cgpa-calc.lovable.app
+## Features
 
-## Build with Lovable
+- **Semester GPA:** Add, edit, or remove courses, credit counts, and letter grades (O, A+, A, B+, B, C, U) with immediate GPA computation.
+- **Overall CGPA:** Calculate cumulative GPA via simple average or exact credit-weighted formulas.
+- **Required GPA:** Determine the exact GPA needed in the upcoming term to hit your target cumulative CGPA.
+- **End Semester Marks:** Convert internal assessments (Test 1, Test 2, Term Work) and university end-sem exam scores into marks out of 100 with grade predictions.
+- **Calculation Guidance:** Downloadable, single-page reference PDF detailing all academic formulas and grade scales.
+- **Liquid Glass Navigation:** HiOS / iOS-style dynamic sliding glass pill with smooth hover tracking and finger drag support.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/8eb01e8f-4706-4ede-aebe-1ba1514936b9).
+## Local Development
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Ensure you have Node.js installed.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
+
+# Run unit tests
+npm test
 ```

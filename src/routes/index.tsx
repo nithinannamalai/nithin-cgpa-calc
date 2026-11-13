@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, Check, X, Share2, GraduationCap } from "lucide-react";
-import { Shell, Stat } from "@/components/Shell";
+import { Shell, Stat, GuidanceLink } from "@/components/Shell";
 import { FloatingGPA } from "@/components/FloatingGPA";
 import { GRADES, GRADE_POINTS, calcGPA, type Course, type Grade } from "@/lib/gpa";
 import { useLocal, uid } from "@/lib/storage";
@@ -45,7 +45,7 @@ function GpaPage() {
     try {
       const list = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1] ?? ""))))) as [string, number][];
       setCourses(list.map(([n, cr]) => ({ id: uid(), name: n, credits: cr, grade: "O" as Grade })));
-    } catch {}
+    } catch { }
   }, []);
   const share = async () => {
     const data = btoa(unescape(encodeURIComponent(JSON.stringify(courses.map((c) => [c.name, c.credits])))));
@@ -67,7 +67,10 @@ function GpaPage() {
 
   return (
     <Shell>
-      <h1 className="font-display text-3xl font-bold sm:text-5xl">Semester GPA</h1>
+      <div className="flex flex-wrap items-center justify-between gap-2.5">
+        <h1 className="font-display text-3xl font-bold sm:text-5xl">Semester GPA</h1>
+        <GuidanceLink />
+      </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="GPA" value={gpa.toFixed(2)} big />
@@ -89,10 +92,10 @@ function GpaPage() {
         className="clay-pill mt-3"
         onClick={() => {
           setCourses(SEM3.map(([n, cr]) => ({ id: uid(), name: n, credits: cr, grade: "O" as Grade })));
-          toast.success("Sem 3 courses loaded!");
+          toast.success("R25 EEE Sem 3 courses loaded!");
         }}
       >
-        <GraduationCap size={14} className="inline" /> Sem 3
+        <GraduationCap size={14} className="inline" /> R25 EEE Sem 3
       </button>
 
       {courses.length > 0 && (
