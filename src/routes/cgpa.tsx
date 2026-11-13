@@ -53,7 +53,7 @@ function CgpaPage() {
   return (
     <Shell>
       <h1 className="font-display text-3xl font-bold sm:text-5xl">Overall CGPA</h1>
-      <p className="mt-1 text-muted-foreground">Choose a quick estimate or an accurate credit-weighted calculation</p>
+      <p className="mt-1 text-muted-foreground">Choose approx. or an accurate credit-weighted calculation</p>
 
       <div className="glass animate-rise mt-6 flex items-center gap-2 rounded-2xl p-2" role="group" aria-label="CGPA calculation mode">
         <button
@@ -123,7 +123,7 @@ function CgpaPage() {
             <Stat label="Credit-Weighted CGPA" value={weighted.cgpa.toFixed(2)} big />
             <Stat label="Total Credits" value={String(weighted.totalCredits)} />
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">CGPA = Σ(GPA × Credits) / Σ(Credits). Incomplete or invalid rows aren't counted.</p>
+          <p className="mt-3 text-xs text-muted-foreground">*Incomplete or invalid rows aren't counted.</p>
 
           <div className="mt-6 space-y-3">
             {creditEntries.map((entry, index) => {
