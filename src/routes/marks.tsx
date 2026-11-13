@@ -32,8 +32,8 @@ function MarksPage() {
 
   return (
     <Shell>
-      <h1 className="font-display text-3xl font-bold sm:text-5xl">End Sem Marks</h1>
-      <p className="mt-1 text-muted-foreground">Total /100 = Test 1 × 0.3 + Test 2 × 0.3 + Term Work + End Sem × 0.6</p>
+      <h1 className="font-display text-3xl font-bold sm:text-5xl">End Semester Mark</h1>
+      <p className="mt-1 text-muted-foreground">{"\n"}</p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         <button className="btn-primary" onClick={() => setSubjects([...subjects, blank(subjects.length + 1)])}>
@@ -56,7 +56,7 @@ function MarksPage() {
           const input = (k: MarkField, label: string) => (
             <label className="block">
               <span className="mb-1 block text-xs text-muted-foreground">
-                {label} <span className="opacity-70">/{MARK_LIMITS[k]}</span>
+                {label}{k === "endSem" ? "\u00a0(" : " ("}<span className="opacity-70">{k === "endSem" ? "\u00a0" : " "}/{MARK_LIMITS[k]})</span>
                 {k === "endSem" && s.target ? <span className="ml-1 font-semibold text-tertiary">· auto</span> : null}
               </span>
               <input
@@ -74,10 +74,10 @@ function MarksPage() {
           );
           const rows: [string, number, number][] =
             s.mode === "split"
-              ? [["Test 1 × 0.3", r.i1, 15], ["Test 2 × 0.3", r.i2, 15], ["Term Work", r.tw, 10], ["End Sem × 0.6", r.endSem, 60]]
+              ? [["INT TEST 1", r.i1, 15], ["INT TEST 2", r.i2, 15], ["Term Work", r.tw, 10], ["END SEM", r.endSem, 60]]
               : s.mode === "total"
-                ? [["Internals", r.internals, 40], ["End Sem × 0.6", r.endSem, 60]]
-                : [["Internals", r.internals, 50], ["End Sem ÷ 2", r.endSem, 50]];
+                ? [["Internals", r.internals, 40], ["END SEM", r.endSem, 60]]
+                : [["Internals", r.internals, 50], ["END SEM", r.endSem, 50]];
 
           return (
             <li key={s.id} className="glass animate-rise rounded-2xl p-4">
