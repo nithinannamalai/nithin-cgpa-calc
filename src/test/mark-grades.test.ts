@@ -10,3 +10,13 @@ describe("grade for final total", () => {
   it("50–55 is C", () => { expect(gradeForTotal(55)).toBe("C"); expect(gradeForTotal(50)).toBe("C"); });
   it("below 50 is U", () => { expect(gradeForTotal(49.5)).toBe("U"); expect(gradeForTotal(34)).toBe("U"); expect(gradeForTotal(0)).toBe("U"); });
 });
+
+import { applyMarksPatch, calcMarks } from "@/lib/marks";
+describe("target total grade", () => {
+  it("target 81 gives total 81 and grade A+", () => {
+    const s = applyMarksPatch({ id: "x", name: "S", mode: "split", i1: "33", i2: "27", tw: "7", internals: "", endSem: "" }, { target: "81" });
+    const t = calcMarks(s).total;
+    expect(t).toBe(81);
+    expect(gradeForTotal(t)).toBe("A+");
+  });
+});
