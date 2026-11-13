@@ -47,11 +47,11 @@ export function calcMarks(s: Pick<MarksSubject, "mode" | "i1" | "i2" | "tw" | "i
   if (s.mode === "total50") {
     const internals = Math.min(num(s.internals50), MARK_LIMITS.internals50);
     const endSem = end * 0.5;
-    return { i1, i2, tw, internals, endSem, total: internals + endSem };
+    return { i1, i2, tw, internals, endSem, total: Math.round((internals + endSem) * 100) / 100 };
   }
   const internals = s.mode === "total" ? Math.min(num(s.internals), MARK_LIMITS.internals) : i1 + i2 + tw;
   const endSem = end * 0.6;
-  return { i1, i2, tw, internals, endSem, total: internals + endSem };
+  return { i1, i2, tw, internals, endSem, total: Math.round((internals + endSem) * 100) / 100 };
 }
 
 /** End Sem mark (/100) needed to reach a final total, keeping the subject's internals as they are. */
