@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, Check, X, Share2, GraduationCap } from "lucide-react";
 import { Shell, Stat } from "@/components/Shell";
@@ -30,6 +30,15 @@ function GpaPage() {
   const [credits, setCredits] = useState("");
   const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState({ name: "", credits: "" });
+  const nameRef = useRef<HTMLInputElement>(null);
+  const creditsRef = useRef<HTMLInputElement>(null);
+  const draftCreditsRef = useRef<HTMLInputElement>(null);
+  // Phone keyboard "next" arrow sends Enter: move focus to the next box instead of submitting.
+  const nextOnEnter = (next: RefObject<HTMLInputElement | null>) => (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    next.current?.focus();
+  };
   useEffect(() => {
     const m = window.location.hash.match(/c=([^&]+)/);
     if (!m) return;
@@ -51,6 +60,7 @@ function GpaPage() {
     setCourses([...courses, { id: uid(), name: name.trim(), credits: c, grade: "O" }]);
     setName("");
     setCredits("");
+    nameRef.current?.focus();
   };
   const update = (id: string, patch: Partial<Course>) =>
     setCourses(courses.map((c) => (c.id === id ? { ...c, ...patch } : c)));
@@ -68,11 +78,11 @@ function GpaPage() {
 
       <form
         onSubmit={(e) => { e.preventDefault(); add(); }}
-        className="glass mt-6 grid grid-cols-[minmax(0,1fr)_5.5rem] gap-2 rounded-2xl p-3 sm:flex sm:flex-row"
+        className="glass mt-6 grid grid-cols-[minmax(0,1fr)_5rem_auto] gap-2 rounded-2xl p-3 sm:flex sm:flex-row"
       >
-        <input className="field min-w-0 sm:flex-1" placeholder="Course name" enterKeyHint="next" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} />
-        <input className="field min-w-0 sm:w-32" placeholder="Credits" type="number" min="0" step="0.5" inputMode="decimal" enterKeyHint="done" value={credits} onChange={(e) => setCredits(e.target.value)} />
-        <button className="btn-primary col-span-2" type="submit"><Plus size={18} /> Save course</button>
+        <input ref={nameRef} className="field min-w-0 sm:flex-1" placeholder="Course name" enterKeyHint="next" autoComplete="off" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={nextOnEnter(creditsRef)} />
+        <input ref={creditsRef} className="field min-w-0 max-sm:!px-2.5 max-sm:[appearance:textfield] max-sm:[&::-webkit-inner-spin-button]:appearance-none sm:w-32" placeholder="Credits" type="number" min="0" step="0.5" inputMode="decimal" enterKeyHint="done" value={credits} onChange={(e) => setCredits(e.target.value)} />
+        <button className="btn-primary max-sm:!px-3" type="submit" aria-label="Save course"><Plus size={18} /> <span className="sm:hidden">Save</span><span className="hidden sm:inline">Save course</span></button>
       </form>
 
       <button
@@ -86,15 +96,15 @@ function GpaPage() {
       </button>
 
       {courses.length > 0 && (
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="text-sm text-muted-foreground">Quick set:</span>
+        <div className="mt-4 flex flex-nowrap items-center gap-1.5 sm:gap-2">
+          <span className="shrink-0 text-xs text-muted-foreground sm:text-sm">Quick set:</span>
           {(["O", "A+", "A"] as Grade[]).map((g) => (
-            <button key={g} className="clay-pill" onClick={() => setCourses(courses.map((c) => ({ ...c, grade: g })))}>
+            <button key={g} className="clay-pill shrink-0 whitespace-nowrap max-sm:!px-2.5 max-sm:!text-xs" onClick={() => setCourses(courses.map((c) => ({ ...c, grade: g })))}>
               All {g}
             </button>
           ))}
           <select
-            className="clay-pill cursor-pointer outline-none [--pill-bg:var(--tertiary)] [--pill-fg:var(--tertiary-foreground)]"
+            className="clay-pill min-w-0 cursor-pointer outline-none max-sm:!px-2.5 max-sm:!text-xs [--pill-bg:var(--tertiary)] [--pill-fg:var(--tertiary-foreground)]"
             aria-label="Sort by"
             defaultValue=""
             onChange={(e) => {
@@ -119,8 +129,8 @@ function GpaPage() {
           <li key={c.id} className="glass animate-rise rounded-2xl p-4">
             {editing === c.id ? (
               <div className="grid grid-cols-[minmax(0,1fr)_5.5rem] gap-2 sm:flex sm:flex-row">
-                <input className="field min-w-0 sm:flex-1" aria-label="Course name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
-                <input className="field min-w-0 sm:w-28" aria-label="Credits" type="number" min="0" step="0.5" inputMode="decimal" value={draft.credits} onChange={(e) => setDraft({ ...draft, credits: e.target.value })} />
+                <input className="field min-w-0 sm:flex-1" aria-label="Course name" enterKeyHint="next" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} onKeyDown={nextOnEnter(draftCreditsRef)} />
+                <input ref={draftCreditsRef} className="field min-w-0 sm:w-28" aria-label="Credits" enterKeyHint="done" type="number" min="0" step="0.5" inputMode="decimal" value={draft.credits} onChange={(e) => setDraft({ ...draft, credits: e.target.value })} />
                 <div className="col-span-2 flex gap-2">
                   <button className="btn-primary flex-1" onClick={() => {
                     const cr = Number(draft.credits);
